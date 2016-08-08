@@ -16,7 +16,7 @@ class FallbackRule(Rule):
 
 class HelpRule(Rule):
     def match_expr(self):
-        return (r'[你妳](能|可以|會).*(做|幹)(什麼|啥)',)
+        return (r'[你妳](能|可以|會).*([做幹]|幫.*)(什麼|嘛|啥)',)
 
     def run(self, bot, message, **kwargs):
         return '你可以問我現在的時間、學校的天氣、或是會辦的狀況。'
