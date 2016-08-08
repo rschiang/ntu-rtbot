@@ -2,13 +2,14 @@
 import os
 from bottle import Bottle, request, abort
 from datetime import datetime
-from telegram import Bot, Update
+from telegram import Bot, Update, ChatAction
 
 # Config
 TELEGRAM_TOKEN = os.environ.get('RT_TELEGRAM_TOKEN')
 WEBHOOK_TOKEN = os.environ.get('RT_WEBHOOK_TOKEN', 'RT')
 BASE_URL = os.environ.get('RT_BASE_URL')
 USERS = os.environ.get('RT_WHITELIST', '').split(',')
+IMAGE_DIR = os.environ.get('RT_IMAGE_DIR')
 
 # Variables
 app = Bottle()
@@ -23,7 +24,7 @@ def telegram_hook(token):
     chat_id = update.message.chat.id
     user = update.message.from_user
     response_dict = {
-        'method': 'sendMessage',
+        'method': 'sendMessage
         'chat_id': chat_id,
     }
 
@@ -33,15 +34,33 @@ def telegram_hook(token):
         return response_dict
 
     message = update.message.text
-    if message == '/start':
+    if message == '/start' or '安安' in message:
         response_dict['text'] = '嗨 {}，這裡是阿屜。'.format(user.username)
+
+    elif '會辦' in message:
+        import glob
+        recent_file = max(glob.iglob(IMAGE_DIR + '/*.jpg'), default=None)
+        if recent_file:
+            bot.sendChatAction(chat_id=chat_id, action=ChatAction.UPLOAD_PHOTO)
+            with open(recent_file, 'rb') as f:
+                caption = datetime.fromtimestamp(os.path.getctime(recent_file)).strftime('%Y/%m/%d %H:%M:%S')
+                bot.sendPhoto(chat_id=chat_id, photo=f, caption=caption)
+            response_dict['text'] = '這是會辦最近的情況。'
+        else:
+            response_dict['text'] = '目前沒有會辦最近的紀錄。'
+
     elif '現在' in message or '時間' in message:
         now = datetime.now()
         term = now.year - 1987
         days = (now - datetime(now.year if now.month > 7 else now.year + 1, 8, 1, 0, 0)).days + 1
         response_dict['text'] = '沒有問題，現在的時間是 {:%Y/%m/%d %H:%M}，也就是第 {} 屆的第 {} 天。'.format(now, term, days)
+
+    elif '你能' in message:
+        response_dict['text'] = '你可以問我現在的時間、會辦的狀況、或是跟我打招呼。'
+
     else:
-        response_dict['text'] = '什麼什麼？OAO'
+        response_dict['text'] = '什麼什麼？你在說什麼？\n如果不知道要問些什麼，可以問我「你能幫上什麼忙？」'
+
     return response_dict
 
 def set_webhook():
