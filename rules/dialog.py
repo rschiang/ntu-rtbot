@@ -15,7 +15,10 @@ class TeachDialogRule(Rule):
         return (r'我(如果|若|一旦)?(說|講|提到)\s*「?(?P<keyword>[^」，\s]+)」?，?\s*(阿屜)?你就?要?(說|講|大喊)\s*「?(?P<answer>[^」\s]+)」?',)
 
     def run(self, bot, message, keyword, answer, **kwargs):
-        DIALOGUES[keyword] = answer
+        if keyword in DIALOGUES:
+            DIALOGUES[keyword].append(answer)
+        else:
+            DIALOGUES[keyword] = [answer]
 
         try:
             with open('dialog.json', 'w') as f:
@@ -40,4 +43,4 @@ class DialogRule(Rule):
         return None
 
     def run(self, bot, message, keyword, **kwargs):
-        return DIALOGUES[keyword]
+        return random.choice(DIALOGUES[keyword])
