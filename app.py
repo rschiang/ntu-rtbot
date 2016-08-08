@@ -39,9 +39,8 @@ def telegram_hook(token):
             'text': '哈囉 {}，我是阿屜。'.format(user.first_name),
         }
 
-    message = update.message.text
     for rule in rules:
-        text = rule.match(bot, message)
+        text = rule.match(bot, update.message)
         if text:
             return {
                 'method': 'sendMessage',
