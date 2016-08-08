@@ -40,6 +40,8 @@ def telegram_hook(token):
         term = now.year - 1987
         days = (now - datetime(now.year if now.month > 7 else now.year + 1, 8, 1, 0, 0)).days + 1
         response_dict['text'] = '沒有問題，現在的時間是 {:%Y/%m/%d %H:%M}，也就是第 {} 屆的第 {} 天。'.format(now, term, days)
+    else:
+        response_dict['text'] = '什麼什麼？OAO'
     return response_dict
 
 def set_webhook():
