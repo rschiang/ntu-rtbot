@@ -24,7 +24,7 @@ def telegram_hook(token):
     chat_id = update.message.chat.id
     user = update.message.from_user
     response_dict = {
-        'method': 'sendMessage
+        'method': 'sendMessage',
         'chat_id': chat_id,
     }
 
