@@ -18,6 +18,8 @@ rules = [
     rules.PhotoRule(),
     rules.TimeRule(),
     rules.HelpRule(),
+    rules.TeachDialogRule(),
+    rules.DialogRule(),
     rules.HelloRule(),
     rules.FallbackRule(),
 ]
