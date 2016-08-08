@@ -12,7 +12,7 @@ except IOError:
 
 class TeachDialogRule(Rule):
     def match_expr(self):
-        return (r'我(如果|若|一旦)?(說|講|提到)\s*「?(?P<keyword>[^」，\s]+)」?，?\s*(阿屜)?你就?要?(說|講|大喊)\s*「?(?P<answer>[^」\s]+)」?',)
+        return (r'我(如果|若|一旦)?(說|講|提到)\s*「?(?P<keyword>.+?)」?，?\s*(阿屜)?你就?要?(說|講|大喊)\s*「?(?P<answer>.+?)」?',)
 
     def run(self, bot, message, keyword, answer, **kwargs):
         if keyword in DIALOGUES:
