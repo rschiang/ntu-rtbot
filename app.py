@@ -2,7 +2,6 @@
 import os
 import rules
 from bottle import Bottle, request, abort
-from datetime import datetime
 from telegram import Bot, Update, ChatAction
 
 # Config
@@ -10,12 +9,15 @@ TELEGRAM_TOKEN = os.environ.get('RT_TELEGRAM_TOKEN')
 WEBHOOK_TOKEN = os.environ.get('RT_WEBHOOK_TOKEN', 'RT')
 BASE_URL = os.environ.get('RT_BASE_URL')
 USERS = os.environ.get('RT_WHITELIST', '').split(',')
-IMAGE_DIR = os.environ.get('RT_IMAGE_DIR')
 
 # Variables
 app = Bottle()
 bot = Bot(token=TELEGRAM_TOKEN)
 rules = [
+    rules.WeatherRule(),
+    rules.PhotoRule(),
+    rules.TimeRule(),
+    rules.HelpRule(),
     rules.HelloRule(),
     rules.FallbackRule(),
 ]
