@@ -66,6 +66,9 @@ def telegram_hook(token):
     elif '你能' in message:
         response_dict['text'] = '你可以問我現在的時間、學校的天氣、或是會辦的狀況。'
 
+    elif 'BOT' in message.lower():
+        response_dict['text'] = '可是他們會打模糊仗！(〒皿〒)'
+
     else:
         response_dict['text'] = '什麼什麼？你在說什麼？\n如果不知道要問些什麼，可以問我「你能幫上什麼忙？」'
 
