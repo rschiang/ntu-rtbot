@@ -19,7 +19,7 @@ class TeachDialogRule(Rule):
 
         try:
             with open('dialog.json', 'w') as f:
-                json.dump(f, ensure_ascii=False, indent='\t')
+                json.dump(DIALOGUES, f, ensure_ascii=False, indent='\t')
         except IOError:
             pass
         finally:
