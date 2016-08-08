@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-import datetime
 import os
 from bottle import Bottle, request, abort
+from datetime import datetime
 from telegram import Bot, Update
 
 # Config
@@ -22,20 +22,25 @@ def telegram_hook(token):
     update = Update.de_json(request.json)
     chat_id = update.message.chat.id
     user = update.message.from_user
+    response_dict = {
+        'method': 'sendMessage',
+        'chat_id': chat_id,
+    }
 
     # Filter out users
     if user.username not in USERS:
-        return {
-            'method': 'sendMessage',
-            'chat_id': chat_id,
-            'text': '哈囉 {}，我是阿屜。'.format(user.first_name),
-        }
+        response_dict['text'] = '哈囉 {}，我是阿屜。'.format(user.first_name)
+        return response_dict
 
-    return {
-        'method': 'sendMessage',
-        'chat_id': chat_id,
-        'text': '嗨 {}，這裡是阿屜。'.format(user.username),
-    }
+    message = update.message.text
+    if message == '/start':
+        response_dict['text'] = '嗨 {}，這裡是阿屜。'.format(user.username)
+    elif '現在' in message or '時間' in message:
+        now = datetime.now()
+        term = now.year - 1987
+        days = (now - datetime(now.year if now.month > 7 else now.year + 1, 8, 1, 0, 0)).days + 1
+        response_dict['text'] = '沒有問題，現在的時間是 {:%Y/%m/%d %H:%M}，也就是第 {} 屆的第 {} 天。'.format(now, term, days)
+    return response_dict
 
 def set_webhook():
     return bot.set_webhook('{}/hooks/{}'.format(BASE_URL, WEBHOOK_TOKEN))
