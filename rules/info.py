@@ -1,5 +1,6 @@
 import requests
 from datetime import datetime
+from telegram import ChatAction
 from .rule import Rule
 
 class TimeRule(Rule):
@@ -21,6 +22,7 @@ class WeatherRule(Rule):
         )
 
     def run(self, bot, message, **kwargs):
+        bot.sendChatAction(chat_id=chat_id, action=ChatAction.TYPING)
         try:
             weather = requests.get('http://weather.ntustudents.org/api').json()
             return '現在學校的氣溫是 {temperature} 度，降雨強度 {rain} mm/h。'.format(**weather)
