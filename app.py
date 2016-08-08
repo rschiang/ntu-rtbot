@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import datetime
 import os
 from bottle import Bottle, request, abort
 from telegram import Bot, Update
@@ -17,11 +18,23 @@ bot = Bot(token=TELEGRAM_TOKEN)
 def telegram_hook(token):
     if token != WEBHOOK_TOKEN:
         abort(401, 'Unauthorized')
+
     update = Update.de_json(request.json)
+    chat_id = update.message.chat.id
+    user = update.message.from_user
+
+    # Filter out users
+    if user.username not in USERS:
+        return {
+            'method': 'sendMessage',
+            'chat_id': chat_id,
+            'text': '哈囉 {}，我是阿屜。'.format(user.first_name),
+        }
+
     return {
         'method': 'sendMessage',
-        'chat_id': update.message.chat.id,
-        'text': '哈囉 {}，我是阿屜。'.format(update.message.from_user.username),
+        'chat_id': chat_id,
+        'text': '嗨 {}，這裡是阿屜。'.format(user.username),
     }
 
 def set_webhook():
