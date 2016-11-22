@@ -2,3 +2,4 @@ bottle==0.12.9
 gunicorn==19.6.0
 requests==2.10.0
 python-telegram-bot==5.0.0
+Pillow==3.4.2
