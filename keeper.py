@@ -54,5 +54,6 @@ if __name__ == '__main__':
     while len(recent_files) >= 2:
         file_a, file_b = recent_files[0], recent_files[1]
         compare_files(file_a, file_b)
+        del recent_files[0]
         if not is_iterating:
             break
