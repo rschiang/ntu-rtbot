@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import glob
 import os
 import sys
@@ -8,7 +9,7 @@ from telegram import Bot, ChatAction
 # Config
 TELEGRAM_TOKEN = os.environ.get('RT_TELEGRAM_TOKEN')
 IMAGE_DIR = os.environ.get('RT_IMAGE_DIR')
-MASTERS = os.environ.get('RT_MASTERS', '').split(',')
+MASTERS = [int(i) for i in os.environ.get('RT_MASTERS', '').split(',')]
 
 # Variables
 bot = Bot(token=TELEGRAM_TOKEN)
@@ -45,9 +46,9 @@ if __name__ == '__main__':
     med_b, rms_b, stdev_b = histogram(file_b)
     if (rms_a - rms_b) > 20:
         for master in MASTERS:
+            send_photo(file_a, chat_id=master)
             bot.sendMessage(chat_id=master, text='哈囉，這裡是阿屜。會辦似乎變明亮一些了。')
-            send_photo(rms_a, chat_id=master)
     elif (rms_b - rms_a) > 20:
         for master in MASTERS:
-            bot.sendMessage(chat_id=master, text='哈囉，這裡是阿屜。會辦似乎變得暗一些了，這是最近的狀況。')
-            send_photo(rms_b, chat_id=master)
+            send_photo(file_b, chat_id=master)
+            bot.sendMessage(chat_id=master, text='哈囉，這裡是阿屜。會辦似乎變得暗一些了。附上最近的狀況，還請多注意囉。')
