@@ -37,13 +37,14 @@ def compare_files(file_a, file_b):
     med_a, rms_a, stdev_a = histogram(file_a)
     med_b, rms_b, stdev_b = histogram(file_b)
     if abs(rms_a - rms_b) > 20:
+        bot.sendMessage(chat_id=master, )
         is_occupying = (rms_a > rms_b)
         the_file = (file_a if is_occupying else file_b)
-        the_message = '哈囉，這裡是阿屜。會辦似乎變得{}一些了。附上最近的狀況，還請多注意囉。'.format(
-                      '明亮' if is_occupying else '暗')
+        the_message = '哈囉，這裡是阿屜。會辦似乎變得{}一些了。'.format('明亮' if is_occupying else '暗')
         for master in MASTERS:
-            send_photo(the_file, chat_id=master)
             bot.sendMessage(chat_id=master, text=the_message)
+            send_photo(the_file, chat_id=master)
+            bot.sendMessage(chat_id=master, text='附上最近的狀況，還請多注意囉。')
 
 if __name__ == '__main__':
     now = datetime.now()
