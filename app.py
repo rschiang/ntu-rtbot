@@ -30,8 +30,28 @@ def telegram_hook(token):
         abort(401, 'Unauthorized')
 
     update = Update.de_json(request.json)
-    chat_id = update.message.chat.id
-    user = update.message.from_user
+    if update.callback_query:
+        return process_callback(update.callback_query)
+    elif update.message:
+        return process_message(update.message)
+
+def process_callback(callback_query):
+    user = callback_query.from_user
+    if user.username not in USERS:
+        return
+
+    for rule in rules:
+        if rule.query_callback(bot, callback_query):
+            break
+
+    return {
+        'method': 'answerCallbackQuery',
+        'callback_query_id': callback_query.id,
+    }
+
+def process_message(message):
+    chat_id = message.chat.id
+    user = message.from_user
 
     # Filter out users
     if user.username not in USERS:
@@ -42,7 +62,7 @@ def telegram_hook(token):
         }
 
     for rule in rules:
-        text = rule.match(bot, update.message)
+        text = rule.match(bot, message)
         if text:
             return {
                 'method': 'sendMessage',

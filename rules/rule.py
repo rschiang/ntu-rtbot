@@ -27,3 +27,9 @@ class Rule(object):
     '''
     def run(self, bot, message, **kwargs):
         pass
+
+    '''
+    Process callback query if applicable; return `None` otherwise.
+    '''
+    def query_callback(self, bot, callback_query):
+        return None
