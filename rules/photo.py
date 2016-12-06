@@ -44,6 +44,7 @@ def send_photo(fp, bot, chat_id):
             [
                 InlineKeyboardButton('≪ 更早', callback_data=format_payload(photo_time - timedelta(minutes=5))),
                 InlineKeyboardButton('< 較早', callback_data=format_payload(photo_time)),
+                InlineKeyboardButton('較晚 >', callback_data=format_payload(photo_time) + timedelta(minutes=2)),
             ],
             [
                 InlineKeyboardButton('更新', callback_data='photo:capture'),
