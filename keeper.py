@@ -4,6 +4,7 @@ import os
 import sys
 from datetime import datetime
 from PIL import Image, ImageStat
+from rules.photo import send_photo
 from telegram import Bot, ChatAction
 
 # Config
@@ -19,12 +20,6 @@ def histogram(fp):
         image.draft(mode='L', size=(320, 320))
         stat = ImageStat.Stat(image)
         return (stat.median[0], stat.rms[0], stat.stddev[0])
-
-def send_photo(fp, chat_id):
-    bot.sendChatAction(chat_id=chat_id, action=ChatAction.UPLOAD_PHOTO)
-    with open(fp, 'rb') as f:
-        caption = datetime.fromtimestamp(os.path.getctime(fp)).strftime('%Y/%m/%d %H:%M:%S')
-        bot.sendPhoto(chat_id=chat_id, photo=f, caption=caption)
 
 def compare_time(time_a, time_b):
     delta_seconds = time_a - time_b
@@ -46,7 +41,7 @@ def compare_files(file_a, file_b):
         the_message = '哈囉，這裡是阿屜。會辦似乎變得{}一些了。'.format('明亮' if is_occupying else '暗')
         for master in MASTERS:
             bot.sendMessage(chat_id=master, text=the_message)
-            send_photo(the_file, chat_id=master)
+            send_photo(the_file, bot=bot, chat_id=master)
             bot.sendMessage(chat_id=master, text='附上最近的狀況，還請多注意囉。')
 
 if __name__ == '__main__':

@@ -34,10 +34,10 @@ class PhotoRule(Rule):
 def format_payload(time):
     return 'photo:{:%Y-%m-%d %H:%M:%S}'.format(time)
 
-def send_photo(bot, chat_id, photo_path):
+def send_photo(fp, bot, chat_id):
     bot.sendChatAction(chat_id=chat_id, action=ChatAction.UPLOAD_PHOTO)
-    with open(photo_path, 'rb') as f:
-        photo_time = datetime.fromtimestamp(os.path.getctime(photo_path))
+    with open(fp, 'rb') as f:
+        photo_time = datetime.fromtimestamp(os.path.getctime(fp))
         keyboard = InlineKeyboardMarkup(inline_keyboard=[
             [
                 InlineKeyboardButton('≪ 更早', callback_data=format_payload(photo_time - timedelta(minutes=5))),
