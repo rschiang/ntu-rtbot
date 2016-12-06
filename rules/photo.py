@@ -28,7 +28,7 @@ class PhotoRule(Rule):
         recent_files = sorted(glob.iglob(IMAGE_DIR + '/*.jpg'), reverse=True)
         for recent_file in recent_files:
             if os.path.getctime(recent_file) < cursor_time:
-                send_photo(recent_file, bot=bot, chat_id=callback_query.chat_instance)
+                send_photo(recent_file, bot=bot, chat_id=callback_query.chat.id)
                 break
 
         return True
