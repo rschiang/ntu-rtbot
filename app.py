@@ -40,14 +40,10 @@ def process_callback(callback_query):
     if user.username not in USERS:
         return
 
+    bot.answerCallbackQuery(callback_query.id)
     for rule in rules:
         if rule.query_callback(bot, callback_query):
             break
-
-    return {
-        'method': 'answerCallbackQuery',
-        'callback_query_id': callback_query.id,
-    }
 
 def process_message(message):
     chat_id = message.chat.id

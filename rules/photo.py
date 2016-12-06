@@ -31,6 +31,8 @@ class PhotoRule(Rule):
                 send_photo(recent_file, bot=bot, chat_id=callback_query.chat_instance)
                 break
 
+        return True
+
 def format_payload(time):
     return 'photo:{:%Y-%m-%d %H:%M:%S}'.format(time)
 
