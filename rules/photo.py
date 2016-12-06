@@ -13,7 +13,7 @@ class PhotoRule(Rule):
     def run(self, bot, message, **kwargs):
         recent_file = max(glob.iglob(IMAGE_DIR + '/*.jpg'), default=None)
         if recent_file:
-            send_photo(bot, message.chat.id, recent_file)
+            send_photo(recent_file, bot=bot, chat_id=message.chat.id)
             return '這是會辦最近的情況。'
         return '目前沒有會辦最近的紀錄。'
 
@@ -28,7 +28,7 @@ class PhotoRule(Rule):
         recent_files = sorted(glob.iglob(IMAGE_DIR + '/*.jpg'), reverse=True)
         for recent_file in recent_files:
             if os.path.getctime(recent_file) < cursor_time:
-                send_photo(bot, callback_query.chat_instance, recent_file)
+                send_photo(recent_file, bot=bot, chat_id=callback_query.chat_instance)
                 break
 
 def format_payload(time):
