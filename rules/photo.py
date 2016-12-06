@@ -48,4 +48,4 @@ def send_photo(fp, bot, chat_id):
             ],
         ])
         caption = photo_time.strftime('%Y/%m/%d %H:%M:%S')
-        bot.sendPhoto(chat_id=chat_id, photo=f, caption=caption)
+        bot.sendPhoto(chat_id=chat_id, photo=f, caption=caption, reply_markup=keyboard)
