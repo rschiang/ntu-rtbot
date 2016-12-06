@@ -41,11 +41,11 @@ def send_photo(fp, bot, chat_id):
         keyboard = InlineKeyboardMarkup(inline_keyboard=[
             [
                 InlineKeyboardButton('≪ 更早', callback_data=format_payload(photo_time - timedelta(minutes=5))),
-                InlineKeyboardButton('< 較早', callback_data=format_payload(photo_time),
+                InlineKeyboardButton('< 較早', callback_data=format_payload(photo_time)),
             ],
             [
                 InlineKeyboardButton('更新', callback_data='photo:capture'),
-            ]
+            ],
         ])
         caption = photo_time.strftime('%Y/%m/%d %H:%M:%S')
         bot.sendPhoto(chat_id=chat_id, photo=f, caption=caption)
