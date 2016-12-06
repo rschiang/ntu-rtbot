@@ -26,14 +26,17 @@ def send_photo(fp, chat_id):
         caption = datetime.fromtimestamp(os.path.getctime(fp)).strftime('%Y/%m/%d %H:%M:%S')
         bot.sendPhoto(chat_id=chat_id, photo=f, caption=caption)
 
-def compare_files(file_a, file_b):
-    delta_seconds = os.path.getctime(file_a) - os.path.getctime(file_b)
-    if delta_seconds > 750:
-        if delta_seconds < 1500:
+def compare_time(time_a, time_b):
+    delta_seconds = time_a - time_b
+    if delta_seconds > 600:
+        if delta_seconds % 3600 < 180:
             for master in MASTERS:
-                bot.sendMessage(chat_id=master, text='哈囉，這裡是阿屜。攝影機似乎有一陣子沒有反應了呢。')
+                last_seen = datetime.fromtimestamp(time_b)
+                the_message = '哈囉，這裡是阿屜。攝影機似乎有一陣子沒有反應了呢。最後一次記錄的時間是 %m/%d %H 點 %M 分。'.format(last_seen)
+                bot.sendMessage(chat_id=master, text=the_message)
         sys.exit()  # Delta too long
 
+def compare_files(file_a, file_b):
     med_a, rms_a, stdev_a = histogram(file_a)
     med_b, rms_b, stdev_b = histogram(file_b)
     if abs(rms_a - rms_b) > 20:
@@ -52,8 +55,11 @@ if __name__ == '__main__':
     recent_files = sorted(glob.iglob(pattern), reverse=True)
 
     is_iterating = (len(sys.argv) > 1 and sys.argv[1] == 'backtrace')
+    time_a, time_b = 0, now.timestamp()
     while len(recent_files) >= 2:
         file_a, file_b = recent_files[0], recent_files[1]
+        time_a, time_b = time_b, os.path.getctime(file_a)
+        compare_time(time_a, time_b)
         compare_files(file_a, file_b)
         del recent_files[0]
         if not is_iterating:
