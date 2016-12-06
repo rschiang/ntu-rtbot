@@ -29,7 +29,7 @@ def telegram_hook(token):
     if token != WEBHOOK_TOKEN:
         abort(401, 'Unauthorized')
 
-    update = Update.de_json(request.json)
+    update = Update.de_json(request.json, bot)
     if update.callback_query:
         return process_callback(update.callback_query)
     elif update.message:
