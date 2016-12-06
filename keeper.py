@@ -32,7 +32,7 @@ def compare_time(time_a, time_b):
         if delta_seconds % 3600 < 180:
             for master in MASTERS:
                 last_seen = datetime.fromtimestamp(time_b)
-                the_message = '哈囉，這裡是阿屜。攝影機似乎有一陣子沒有反應了呢。最後一次記錄的時間是 %m/%d %H 點 %M 分。'.format(last_seen)
+                the_message = '哈囉，這裡是阿屜。攝影機似乎有一陣子沒有反應了呢。最後一次記錄的時間是 {:%m/%d %H 點 %M 分}。'.format(last_seen)
                 bot.sendMessage(chat_id=master, text=the_message)
         sys.exit()  # Delta too long
 
