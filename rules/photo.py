@@ -22,7 +22,7 @@ class PhotoRule(Rule):
         if namespace != 'photo': return
 
         try:
-            cursor_time = datetime.strptime(payload, '%Y-%m-%d %H:%M:%S')
+            cursor_time = datetime.strptime(payload, '%Y-%m-%d %H:%M:%S').timestamp()
         except ValueError: return
 
         recent_files = sorted(glob.iglob(IMAGE_DIR + '/*.jpg'), reverse=True)
@@ -44,7 +44,7 @@ def send_photo(fp, bot, chat_id):
             [
                 InlineKeyboardButton('≪ 更早', callback_data=format_payload(photo_time - timedelta(minutes=5))),
                 InlineKeyboardButton('< 較早', callback_data=format_payload(photo_time)),
-                InlineKeyboardButton('較晚 >', callback_data=format_payload(photo_time) + timedelta(minutes=2)),
+                InlineKeyboardButton('較晚 >', callback_data=format_payload(photo_time + timedelta(minutes=2))),
             ],
             [
                 InlineKeyboardButton('更新', callback_data='photo:capture'),
