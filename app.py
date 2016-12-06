@@ -40,7 +40,10 @@ def process_callback(callback_query):
     if user.username not in USERS:
         return
 
-    bot.answerCallbackQuery(callback_query_id=callback_query.id)
+    try:
+        bot.answerCallbackQuery(callback_query_id=callback_query.id)
+    except: pass    # Do our best effort but don't break
+
     for rule in rules:
         if rule.query_callback(bot, callback_query):
             break
